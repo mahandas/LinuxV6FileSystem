@@ -407,6 +407,17 @@ void removeDir(char* filename){
         }
 
 }
+int openfs(const char *filename)
+{
+	fd=open(filename,2);
+	lseek(fd,BLOCK_SIZE,SEEK_SET);
+	read(fd,&super,sizeof(super));
+	lseek(fd,2*BLOCK_SIZE,SEEK_SET);
+        Inode root = getInode(1);
+	read(fd,&root,sizeof(root));
+        ls();
+	return 1;
+}
 void initfs(char* path, int total_blocks, int total_inodes)
 {
         printf("\n filesystem intialization started \n");
@@ -539,6 +550,9 @@ int main(int argc, char *argv[])
                 else if(strcmp(my_argv, "remDir")==0){
                         arg1 = strtok(NULL, " ");
                         removeDir(arg1);
+                }else if(strcmp(my_argv, "openfs")==0){
+                        arg1 = strtok(NULL, " ");
+                        openfs(arg1);
                 }
                 else if(strcmp(my_argv, "pwd")==0){
                         printf("%s\n",pwd);
