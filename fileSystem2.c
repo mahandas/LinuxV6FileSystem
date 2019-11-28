@@ -54,6 +54,7 @@ int fd;
 char pwd[100];
 int curINodeNumber;
 char fileSystemPath[100];
+int total_inodes_count;
 
 void writeToBlock (int blockNumber, void * buffer, int nbytes)
 {
@@ -106,6 +107,15 @@ void addFreeInode(int iNumber){
 }
 
 int getFreeInode(){
+        if (ninode <= 0) {
+            int i;
+            for (i = 2; i<total_inodes_count; i++) {
+                if (super.inode[i].flags != 1<<15) {
+                    super.inode[super.ninode] = i;
+                    super.ninode++;
+                }
+            }
+        }
         super.ninode--;
         return super.inode[super.ninode];
 }
@@ -415,12 +425,12 @@ int openfs(const char *filename)
 	lseek(fd,2*BLOCK_SIZE,SEEK_SET);
         Inode root = getInode(1);
 	read(fd,&root,sizeof(root));
-        ls();
 	return 1;
 }
 void initfs(char* path, int total_blocks, int total_inodes)
 {
         printf("\n filesystem intialization started \n");
+        total_inodes_count = total_inodes;
         char emptyBlock[BLOCK_SIZE] = {0};
         int no_of_bytes,i,blockNumber,iNumber;
 
