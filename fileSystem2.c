@@ -106,11 +106,21 @@ void addFreeInode(int iNumber){
         super.ninode++;
 }
 
+Inode getInode(int INumber){
+        Inode iNode;
+        int blockNumber = (INumber * INODE_SIZE) / BLOCK_SIZE;    // need to remove 
+        int offset = (INumber * INODE_SIZE) % BLOCK_SIZE;
+        lseek(fd,(BLOCK_SIZE * blockNumber) + offset, SEEK_SET);
+        read(fd,&iNode,INODE_SIZE);
+        return iNode;
+}
+
 int getFreeInode(){
-        if (ninode <= 0) {
+        if (super.ninode <= 0) {
             int i;
             for (i = 2; i<total_inodes_count; i++) {
-                if (super.inode[i].flags != 1<<15) {
+                Inode freeInode = getInode(super.inode[i]);
+                if (freeInode.flags != 1<<15) {
                     super.inode[super.ninode] = i;
                     super.ninode++;
                 }
@@ -124,15 +134,6 @@ void writeInode(int INumber, Inode inode){
         int blockNumber = (INumber * INODE_SIZE )/ BLOCK_SIZE;   //need to remove
         int offset = (INumber * INODE_SIZE) % BLOCK_SIZE;
         writeToBlockOffset(blockNumber, offset, &inode, sizeof(Inode));
-}
-
-Inode getInode(int INumber){
-        Inode iNode;
-        int blockNumber = (INumber * INODE_SIZE) / BLOCK_SIZE;    // need to remove 
-        int offset = (INumber * INODE_SIZE) % BLOCK_SIZE;
-        lseek(fd,(BLOCK_SIZE * blockNumber) + offset, SEEK_SET);
-        read(fd,&iNode,INODE_SIZE);
-        return iNode;
 }
 
 void createRootDirectory(){
