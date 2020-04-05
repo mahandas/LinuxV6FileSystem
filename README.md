@@ -1,4 +1,10 @@
+
+
 # LinuxV6FileSystem
+
+Final Project for Operating System.
+
+# Task given
 OS V6 FIleSystem  
   
 V6 file system is highly restrictive. A modification has been done: Block size is 1024 Bytes, i-node
@@ -41,3 +47,20 @@ Remove the directory specified (dir, in this case).
   
 (i) open filename  
 Open the external file filename, which has a v6 filesystem installed.  
+
+# Steps involved 
+
+1. Understanding existing V6 FileSystem( usage, function calls, parameters used, overview of steps involved in functions, limitations)
+2. Implementation of functions with modifications
+3. Debugging the new system using Copy IN and Copy OUT (a & b part) to check the consistency of the system
+4. Testing with large files to check if the system works correctly.
+5. Presentation of Work.
+
+# How to use the System?
+
+1. Copy the file system in your linux server.
+2. Run the file with the Size of the system and the name.
+3. Use to desired commands to work with the files in your System.
+
+
+
